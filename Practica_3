@@ -1,0 +1,50 @@
+import heapq
+
+def dijkstra(graph, start, end):
+    # Inicializamos la cola de prioridad y la distancia a cada nodo
+    queue = [(0, start)]
+    distances = {start: 0}
+    # Recorremos todos los nodos en la cola de prioridad
+    while queue:
+        # Sacamos el nodo con menor distancia
+        (cost, current) = heapq.heappop(queue)
+        # Si hemos llegado al nodo final, devolvemos la distancia más corta
+        if current == end:
+            return distances[end]
+        # Si no, recorremos los nodos vecinos
+        for neighbor in graph[current]:
+            # Calculamos la nueva distancia a través del nodo vecino
+            distance = distances[current] + graph[current][neighbor]
+            # Si la distancia es menor que la almacenada en distances,
+            # actualizamos la distancia y añadimos el nodo a la cola de prioridad
+            if neighbor not in distances or distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(queue, (distance, neighbor))
+    # Si no hemos encontrado una ruta, devolvemos None
+    return None
+
+# Pedimos al usuario que introduzca el inicio del grafo
+start = input("Donde incia (A,B,C,D,E,F,G,Z): ")
+
+# Definimos el grafo de ejemplo
+graph = {
+
+        'A': {'B': 2, 'F': 1},
+    'B': {'A': 2, 'C': 2, 'D': 2,'E': 4},
+    'C': {'B': 2, 'E': 3,'Z': 1},
+    'D': {'B': 2, 'E': 4,'F': 3},
+    'E': {'B': 4, 'C': 3, 'D': 4,'G': 7},
+    'F': {'A': 1, 'D': 3,'G': 5},
+    'G': {'E': 7, 'F': 5,'Z': 6},
+    'Z': {'C': 1, 'G': 6}
+}
+
+# Pedimos al usuario que introduzca el nodo final del grafo
+end = input("Donde termina (A,B,C,D,E,F,G,Z): ")
+
+# Ejecutamos el algoritmo de Dijkstra y mostramos el resultado
+distance = dijkstra(graph, start, end)
+if distance is not None:
+    print(f"La distancia más corta entre {start} y {end} es {distance}")
+else:
+    print(f"No se pudo encontrar una ruta entre {start} y {end}")
