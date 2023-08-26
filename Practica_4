@@ -1,0 +1,35 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Mar 21 22:20:05 2023
+
+@author: bv_ge
+"""
+def cuatro_reinas(fila):
+    k = 1 # inicia en la columna 1
+    fila[1] = 0 # como fila(k) se incrementa antes de usarse, se hace fila(0) igual a -1
+    while k >= 0:
+        fila[k] = fila[k] + 1 # se mueve a la siguiente fila en la columna k
+        while fila[k] <= 3 and not conflicto(k, fila):
+            fila[k] = fila[k] + 1 # se intenta la siguiente fila
+        if fila[k] <= 3:
+            if k == 3:
+                return True # se encontró una solución
+            else:
+                k = k + 1 # se mueve a la siguiente columna
+                fila[k] = -1 # reinicia la fila en la nueva columna
+        else:
+            k = k - 1 # retrocede a la columna anterior
+    return False # no se encontró ninguna solución
+
+def conflicto(k, fila):
+    for i in range(k):
+        if fila[i] == fila[k] or abs(fila[i] - fila[k]) == abs(i - k):
+            return False # hay conflicto en fila, columna o diagonal
+    return True # no hay conflicto
+
+fila = [0, 0, 0, 0]  # inicialmente todas las columnas están vacías
+solucion = cuatro_reinas(fila)
+if solucion:
+    print("Solucion encontrada:", fila)
+else:
+    print("No hay solución.")
