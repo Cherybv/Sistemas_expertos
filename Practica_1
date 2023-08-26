@@ -1,0 +1,40 @@
+from collections import deque
+
+def bfs(graph, start, end):
+    queue = deque([start])
+    visited = [start]
+    path = {start: None}
+
+    while queue:
+        node = queue.popleft()
+        if node == end:
+            return get_path(path, start, end)
+        
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.append(neighbor)
+                path[neighbor] = node
+                queue.append(neighbor)
+
+def get_path(path, start, end):
+    if start == end:
+        return [start]
+
+    return get_path(path, start, path[end]) + [end]
+
+graph = {
+    'A': ['B', 'C', 'G'],
+    'B': ['A','D'],
+    'C': ['A','D','E'],
+    'D': ['B', 'C','F'],
+    'E': ['C','F','G'],
+    'F': ['D','E','H'],
+    'G': ['A','E','B'],
+    'H': ['F']
+}
+
+start_node = input("Ingresa el nodo inicial: ")
+end_node = input("Ingresa el nodo final: ")
+
+path = bfs(graph, start_node, end_node)
+print(path)
